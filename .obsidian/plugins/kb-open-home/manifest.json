@@ -1,0 +1,9 @@
+{
+  "id": "kb-open-home",
+  "name": "KB Open Home",
+  "version": "1.2.0",
+  "minAppVersion": "1.0.0",
+  "description": "Opens the knowledge-base home note at startup, remembers where you stopped reading each note, and offers one-click continue reading. Reads folder names and strings from kb.config.json.",
+  "author": "obsidian-agent-kb contributors",
+  "isDesktopOnly": false
+}

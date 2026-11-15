@@ -1,0 +1,18 @@
+{
+  "types": {
+    "aliases": "aliases",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "sections": "multitext",
+    "kinds": "multitext",
+    "terms": "multitext",
+    "sources": "multitext",
+    "authors": "multitext",
+    "seq": "number",
+    "series_no": "number",
+    "figures": "number",
+    "equations": "number",
+    "words": "number",
+    "year": "number"
+  }
+}

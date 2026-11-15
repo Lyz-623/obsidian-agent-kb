@@ -1,0 +1,616 @@
+/* Knowledge-base notes: academic typography, tiered callouts, figure/equation/table layout,
+   series pager and the Home page container. Colours follow the active theme in light and dark mode.
+   Apply it to a note with `cssclasses: [card-note]` (articles, terms, literature, series maps). */
+
+/* ═══ 1. Tokens ═══════════════════════════════════════════════════════════ */
+body {
+  --rn-serif: "Source Serif 4", "Source Serif Pro", Charter, "Iowan Old Style",
+    "Palatino Linotype", Palatino, Georgia, serif;
+  --rn-teal: 31, 122, 109;
+  --rn-blue: 58, 100, 168;
+  --rn-violet: 122, 90, 166;
+  --rn-amber: 160, 106, 28;
+  --rn-green: 61, 127, 79;
+  --rn-rose: 168, 80, 106;
+  --rn-slate: 98, 110, 124;
+  --rn-accent: var(--rn-blue);
+}
+body.theme-dark {
+  --rn-teal: 108, 199, 181;
+  --rn-blue: 143, 177, 234;
+  --rn-violet: 185, 160, 222;
+  --rn-amber: 226, 184, 113;
+  --rn-green: 140, 207, 156;
+  --rn-rose: 229, 154, 176;
+  --rn-slate: 160, 170, 184;
+}
+
+/* ═══ 2. Base note layout ═════════════════════════════════════════════════ */
+body.show-inline-title .markdown-preview-view:has(.inline-title)
+  .markdown-preview-sizer > .el-h1:not(.el-h1 ~ .el-h1),
+body.show-inline-title .markdown-source-view.mod-cm6.is-live-preview:has(.inline-title)
+  .cm-content > .cm-line.HyperMD-header-1:not(.HyperMD-header-1 ~ .HyperMD-header-1) {
+  display: none;
+}
+
+.markdown-rendered p,
+.markdown-preview-view p {
+  text-align: justify;
+  /* auto (not inter-word): CJK text has few spaces, so inter-word piles all slack onto
+     the one or two spaces in a line; auto spreads it between CJK characters too. */
+  text-justify: auto;
+  text-align-last: left;
+}
+/* Editing modes stay left-aligned: justifying CodeMirror lines that contain inline-math
+   widgets and mixed CJK/Latin text stretches the gaps around formulas unevenly.
+   Reading mode keeps justified paragraphs. */
+.markdown-source-view.mod-cm6 .cm-content > .cm-line {
+  text-align: start;
+  text-justify: auto;
+}
+
+.markdown-preview-view.card-note,
+.markdown-source-view.mod-cm6.card-note {
+  /* Readable width: Minimal's default 40rem widened by 10%. Minimal derives its margins
+     on body, so they are recomputed here from the new width. */
+  --line-width: 44rem;
+  --line-width-wide: calc(var(--line-width) + 12.5%);
+  --file-line-width: 44rem;
+  --content-line-width: min(var(--line-width), var(--max-width));
+  --content-margin-start: max(calc(50% - var(--line-width)/2), calc(50% - var(--max-width)/2));
+  --p-spacing: 1.1rem;
+  --line-height-normal: 1.8;
+  container-type: inline-size;
+}
+.markdown-preview-view.card-note .metadata-container { display: none; }
+
+/* ═══ 3. Heading hierarchy ════════════════════════════════════════════════
+   Serif display headings over sans body text: title → numbered section → subsection. */
+.card-note {
+  --inline-title-font: var(--rn-serif);
+  --inline-title-size: 2.2em;
+  --inline-title-weight: 600;
+  --inline-title-line-height: 1.2;
+  --h1-font: var(--rn-serif);
+  --h2-font: var(--rn-serif);
+  --h2-size: 1.55em;
+  --h2-weight: 600;
+  --h2-line-height: 1.3;
+  --h3-size: 1.14em;
+  --h3-weight: 650;
+  --h3-color: rgb(var(--rn-accent));
+  --h4-size: 0.8em;
+  --h4-weight: 700;
+  --h4-color: var(--text-muted);
+}
+.card-note .inline-title {
+  font-family: var(--rn-serif);
+  letter-spacing: -0.02em;
+  padding-bottom: 0.45em;
+  margin-bottom: 0.6em;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+.markdown-rendered.card-note h1,
+.card-note .cm-header-1 { font-family: var(--rn-serif); letter-spacing: -0.02em; }
+
+.markdown-rendered.card-note h2 {
+  position: relative;
+  font-family: var(--rn-serif);
+  letter-spacing: -0.012em;
+  margin-top: 2.6em;
+  margin-bottom: 0.8em;
+  padding-top: 0.85em;
+  border-top: 1px solid var(--background-modifier-border);
+  border-bottom: 0;
+}
+.markdown-rendered.card-note h2::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 2.75rem;
+  height: 3px;
+  border-radius: 2px;
+  background: rgb(var(--rn-accent));
+}
+.markdown-rendered.card-note h3 {
+  margin-top: 1.9em;
+  margin-bottom: 0.55em;
+  color: rgb(var(--rn-accent));
+}
+.markdown-rendered.card-note h4 {
+  margin-top: 1.6em;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+}
+.markdown-source-view.mod-cm6.card-note .HyperMD-header-2 { padding-top: 1.2em; }
+.markdown-source-view.mod-cm6.card-note .cm-header-2 { font-family: var(--rn-serif); }
+.markdown-source-view.mod-cm6.card-note .cm-header-3 { color: rgb(var(--rn-accent)); }
+
+/* Emphasis system — one meaning per style, used sparingly:
+   **term**        key concept at its defining use  → bold, accent ink
+   ==statement==   key result or conclusion          → highlighter-pen marker
+   ***condition***  critical assumption or distinction → dotted amber underline
+   (native Markdown bold-italic, so Live Preview and Reading mode render identically;
+    inline HTML such as <u> breaks line wrapping in Live Preview) */
+.card-note {
+  --rn-term: var(--rn-blue);
+  --rn-marker: 255, 214, 102;
+  --rn-marker-alpha: 0.55;
+  --rn-caveat: var(--rn-amber);
+}
+.theme-dark .card-note { --rn-marker: 214, 170, 60; --rn-marker-alpha: 0.32; }
+
+.markdown-rendered.card-note :is(p, li, td) strong,
+.markdown-source-view.mod-cm6.card-note .cm-line:not([class*="HyperMD-header"]) .cm-strong {
+  font-weight: 680;
+  color: rgb(var(--rn-term));
+}
+.card-note mark,
+.card-note .cm-highlight {
+  color: inherit;
+  background: linear-gradient(transparent 38%, rgba(var(--rn-marker), var(--rn-marker-alpha)) 38%, rgba(var(--rn-marker), var(--rn-marker-alpha)) 92%, transparent 92%);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 0 0.12em;
+  border-radius: 0;
+}
+.card-note mark strong { color: inherit; }
+/* ***condition***: Reading mode renders <em><strong>…</strong></em>; Live Preview marks the
+   text with both .cm-em and .cm-strong. Both become a plain-weight dotted underline. */
+.card-note em > strong,
+.card-note strong > em,
+.markdown-source-view.mod-cm6.card-note .cm-line .cm-strong.cm-em {
+  font-style: normal !important;
+  font-weight: inherit !important;
+  color: inherit !important;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgba(var(--rn-caveat), 0.85);
+  text-underline-offset: 0.24em;
+  text-decoration-skip-ink: none;
+}
+.card-note em:has(> strong:only-child) { font-style: normal; }
+.markdown-source-view.mod-cm6.card-note .cm-line .cm-strong.cm-em { font-weight: 400 !important; }
+.card-note u {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgba(var(--rn-caveat), 0.85);
+  text-underline-offset: 0.24em;
+  text-decoration-skip-ink: none;
+}
+/* Inside a callout, key terms take the callout's own color for a single accent per box. */
+.markdown-rendered.card-note .callout :is(p, li) strong { color: rgb(var(--callout-color)); }
+.markdown-rendered.card-note .callout:is([data-callout="series"], [data-callout="bridge"], [data-callout="reading"]) :is(p, li) strong { color: var(--text-normal); }
+
+/* Links */
+.card-note a.internal-link { text-underline-offset: 0.22em; }
+.card-note a.internal-link:hover { text-decoration: underline; }
+.card-note a.internal-link:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ═══ 4. Callouts in three visual tiers ═══════════════════════════════════
+   Tier 1 — key results (definition, conclusion, keypoints): tinted, strongest.
+   Tier 2 — reasoning (derivation, intuition, warning, evidence, check): outlined.
+   Tier 3 — course navigation (series, bridge, reading): quiet and compact. */
+.card-note .callout[data-callout="definition"] { --callout-color: var(--rn-blue); --callout-icon: lucide-book-marked; }
+.card-note .callout[data-callout="conclusion"] { --callout-color: var(--rn-green); --callout-icon: lucide-bookmark-check; }
+.card-note .callout[data-callout="keypoints"] { --callout-color: var(--rn-amber); --callout-icon: lucide-star; }
+.card-note .callout[data-callout="derivation"] { --callout-color: var(--rn-violet); --callout-icon: lucide-sigma; }
+.card-note .callout[data-callout="intuition"] { --callout-color: var(--rn-teal); --callout-icon: lucide-lightbulb; }
+.card-note .callout[data-callout="warning"] { --callout-color: var(--rn-amber); --callout-icon: lucide-triangle-alert; }
+.card-note .callout[data-callout="evidence"] { --callout-color: var(--rn-violet); --callout-icon: lucide-book-open-check; }
+.card-note .callout[data-callout="check"] { --callout-color: var(--rn-green); --callout-icon: lucide-check-check; }
+.card-note .callout[data-callout="series"] { --callout-color: var(--rn-slate); --callout-icon: lucide-route; }
+.card-note .callout[data-callout="bridge"] { --callout-color: var(--rn-slate); --callout-icon: lucide-link-2; }
+.card-note .callout[data-callout="reading"] { --callout-color: var(--rn-slate); --callout-icon: lucide-book-open; }
+.card-note .callout[data-callout="workflow"] { --callout-color: var(--rn-slate); --callout-icon: lucide-settings-2; }
+.card-note .callout[data-callout="templates"] { --callout-color: var(--rn-slate); --callout-icon: lucide-file-text; }
+.card-note .callout[data-callout="start"] { --callout-color: var(--rn-blue); --callout-icon: lucide-compass; }
+
+.card-note .callout {
+  margin: 1.4rem 0;
+  padding: 14px 18px;
+  border: 1px solid rgba(var(--callout-color), 0.2);
+  border-inline-start: 3px solid rgba(var(--callout-color), 0.75);
+  border-radius: 10px;
+  background: rgba(var(--callout-color), 0.035);
+  box-shadow: none;
+  mix-blend-mode: normal;
+}
+.card-note .callout-title {
+  gap: 9px;
+  font-size: 0.98em;
+  line-height: 1.5;
+  font-weight: 650;
+  color: rgb(var(--callout-color));
+}
+.card-note .callout-content { min-width: 0; }
+.card-note .callout-content > p:first-child { margin-top: 0.55rem; }
+.card-note .callout-content > :last-child { margin-bottom: 0; }
+.card-note .callout-content p { line-height: 1.75; }
+.markdown-preview-view.card-note .callout-content p { text-align: justify; text-align-last: left; }
+.markdown-source-view.mod-cm6 .callout-content p { text-align: start; }
+.card-note .callout-content li { margin-block: 0.3em; line-height: 1.75; }
+.card-note .callout-content blockquote { margin-inline: 0; }
+.card-note .callout-content .math-block { box-shadow: none; }
+
+/* Tier 1 */
+.card-note .callout:is([data-callout="definition"], [data-callout="conclusion"], [data-callout="keypoints"]) {
+  padding: 16px 20px;
+  border-inline-start-width: 4px;
+  background: rgba(var(--callout-color), 0.085);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 8px 24px -12px rgba(var(--callout-color), 0.35);
+}
+.card-note .callout:is([data-callout="definition"], [data-callout="conclusion"], [data-callout="keypoints"]) > .callout-title {
+  font-weight: 700;
+  font-size: 1.02em;
+}
+
+/* Tier 2: derivation and evidence read as plain outlined panels. */
+.card-note .callout:is([data-callout="derivation"], [data-callout="evidence"]) {
+  background: var(--background-primary);
+}
+
+/* Tier 3: course navigation */
+.card-note .callout:is([data-callout="series"], [data-callout="bridge"], [data-callout="reading"]) {
+  border: 1px solid var(--background-modifier-border);
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  font-size: 0.92em;
+}
+.card-note .callout:is([data-callout="series"], [data-callout="bridge"], [data-callout="reading"]) > .callout-title {
+  color: var(--text-muted);
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.card-note .callout[data-callout="bridge"] {
+  background: transparent;
+  border-style: dashed;
+}
+/* Series pager: Previous / Next tiles with vector arrows in a fixed gutter.
+   Paragraph 1 = previous, 2 = next, optional 3 = roadmap link (moved into the header row). */
+body {
+  --rn-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 12h15M13.5 6l6 6-6 6'/%3E%3C/svg%3E");
+}
+.card-note .callout[data-callout="series"] { position: relative; padding: 12px 14px 14px; }
+.card-note .callout[data-callout="series"] > .callout-title { padding-inline: 2px; padding-right: 13em; }
+.card-note .callout[data-callout="series"] > .callout-content {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+.card-note .callout[data-callout="series"] > .callout-content > p:is(:nth-of-type(1), :nth-of-type(2)) {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  margin: 0;
+  padding: 11px 14px 12px 44px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 9px;
+  background: var(--background-primary);
+  line-height: 1.45;
+  text-align: left;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+.card-note .callout[data-callout="series"] > .callout-content > p:nth-of-type(2) { padding: 11px 44px 12px 14px; }
+.card-note .callout[data-callout="series"] > .callout-content > p:is(:nth-of-type(1), :nth-of-type(2))::before {
+  content: "Previous";
+  color: var(--text-faint);
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.card-note .callout[data-callout="series"] > .callout-content > p:nth-of-type(2)::before { content: "Next"; }
+.card-note .callout[data-callout="series"] > .callout-content > p:is(:nth-of-type(1), :nth-of-type(2))::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  width: 17px;
+  height: 17px;
+  margin-top: -8.5px;
+  background-color: rgb(var(--rn-accent));
+  -webkit-mask: var(--rn-arrow) center / contain no-repeat;
+  mask: var(--rn-arrow) center / contain no-repeat;
+  transform: scaleX(-1);
+  transition: transform .15s ease;
+}
+.card-note .callout[data-callout="series"] > .callout-content > p:nth-of-type(2)::after { left: auto; right: 15px; transform: none; }
+.card-note .callout[data-callout="series"] > .callout-content > p:is(:nth-of-type(1), :nth-of-type(2)):hover {
+  border-color: rgba(var(--rn-accent), 0.45);
+  background: rgba(var(--rn-accent), 0.05);
+}
+.card-note .callout[data-callout="series"] > .callout-content > p:nth-of-type(1):hover::after { transform: scaleX(-1) translateX(3px); }
+.card-note .callout[data-callout="series"] > .callout-content > p:nth-of-type(2):hover::after { transform: translateX(3px); }
+.card-note .callout[data-callout="series"] > .callout-content > p:is(:nth-of-type(1), :nth-of-type(2)) a.internal-link {
+  color: var(--text-normal);
+  font-weight: 600;
+  text-decoration: none;
+}
+/* Stretch the link so the whole tile is clickable. */
+.card-note .callout[data-callout="series"] > .callout-content > p:is(:nth-of-type(1), :nth-of-type(2)) a.internal-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.card-note .callout[data-callout="series"] > .callout-content > p:nth-of-type(3) {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  margin: 0;
+  font-size: 0.8em;
+  line-height: 1.6;
+}
+.card-note .callout[data-callout="series"] > .callout-content > p:nth-of-type(3) a.internal-link {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.card-note .callout[data-callout="series"] > .callout-content > p:nth-of-type(3) a.internal-link:hover { color: rgb(var(--rn-accent)); }
+
+/* Layout-only callout: two-column grid of child callouts. */
+.card-note .callout[data-callout="columns"] {
+  background: transparent; border: 0; box-shadow: none; padding: 0; overflow: visible;
+}
+.card-note .callout[data-callout="columns"] > .callout-title { display: none; }
+.card-note .callout[data-callout="columns"] > .callout-content {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; overflow: visible;
+}
+.card-note .callout[data-callout="columns"] > .callout-content > .callout { margin: 0; min-width: 0; height: auto; }
+.card-note .callout[data-callout="columns"] > .callout-content > p:empty { display: none; }
+
+/* ═══ 5. Equations, tables, figures ═══════════════════════════════════════ */
+/* Reading view matches Live Preview: one modest gap around display math.
+   MathJax adds its own 1em margin to mjx-container[display]; it is zeroed so the gap is set here only.
+   overflow-x:auto forces overflow-y to auto as well, so overflow-y is hidden explicitly
+   (otherwise the MathJax margin turns every equation into a vertical scroll box). */
+.markdown-rendered.card-note .math-block {
+  background: transparent;
+  border: 0;
+  padding: 0.15rem 0.25rem;
+  margin: 0.6rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.markdown-rendered.card-note .math-block mjx-container[display="true"] { margin: 0 !important; }
+/* Obsidian gives .callout-content overflow-x:auto, which also makes it a vertical scroll box:
+   a pixel of equation overhang then shows a scrollbar beside the whole callout.
+   The callout itself never scrolls; wide equations/tables scroll inside their own wrapper. */
+.card-note .callout-content { overflow: visible; }
+.card-note .callout-content > .math-block,
+.card-note .callout-content .table-wrapper { max-width: 100%; }
+.markdown-rendered.card-note .callout-content > .math-block:first-child { margin-top: 0.3rem; }
+.markdown-rendered.card-note .callout-content > .math-block:last-child { margin-bottom: 0.3rem; }
+
+.markdown-rendered table,
+.markdown-preview-view table,
+.markdown-source-view.mod-cm6.is-live-preview .cm-table-widget table {
+  margin-inline: auto !important;
+}
+.markdown-rendered .table-wrapper,
+.markdown-preview-view .table-wrapper,
+.markdown-source-view.mod-cm6.is-live-preview .cm-table-widget .table-wrapper {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto !important;
+  overflow-x: auto;
+}
+.markdown-source-view.mod-cm6.is-live-preview .cm-table-widget {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto !important;
+}
+.markdown-rendered.card-note table { font-size: 0.95em; border-collapse: collapse; }
+.markdown-rendered.card-note th {
+  background: var(--background-secondary);
+  font-weight: 650;
+  border-bottom: 2px solid var(--background-modifier-border);
+}
+.markdown-rendered.card-note tbody tr:nth-child(even) td { background: rgba(var(--rn-slate), 0.04); }
+
+/* Default to the full note width; preserve explicit sizes and drag-resize styles. */
+.markdown-rendered.card-note img,
+.markdown-preview-view.card-note img,
+.markdown-source-view.mod-cm6.is-live-preview.card-note .image-embed img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto !important;
+  object-fit: contain;
+}
+.markdown-rendered.card-note img:not([width]):not([style*="width"]),
+.markdown-preview-view.card-note img:not([width]):not([style*="width"]),
+.markdown-source-view.mod-cm6.is-live-preview.card-note .image-embed img:not([width]):not([style*="width"]) {
+  width: 100%;
+}
+.markdown-rendered.card-note .image-embed,
+.markdown-preview-view.card-note .image-embed,
+.markdown-source-view.mod-cm6.is-live-preview.card-note .image-embed {
+  display: block;
+  max-width: 100%;
+  margin-inline: auto !important;
+}
+.markdown-rendered.card-note .image-embed:not([width]):not([style*="width"]):not(:has(img[width])),
+.markdown-preview-view.card-note .image-embed:not([width]):not([style*="width"]):not(:has(img[width])),
+.markdown-source-view.mod-cm6.is-live-preview.card-note .image-embed:not([width]):not([style*="width"]):not(:has(img[width])) {
+  width: 100%;
+}
+.markdown-rendered.card-note .image-embed { border-radius: 6px; }
+
+.markdown-rendered .figure-caption,
+.markdown-preview-view .figure-caption {
+  margin: 0.5rem 0 1.6rem;
+  color: var(--text-muted);
+  font-size: 0.88em;
+  line-height: 1.6;
+  text-align: justify;
+  text-justify: auto;
+  text-align-last: left;
+}
+.markdown-rendered.card-note .figure-caption {
+  border-left: 2px solid rgba(var(--rn-accent), 0.45);
+  padding-left: 0.8rem;
+}
+.card-note .figure-caption a { color: var(--text-accent); }
+.card-note .markdown-embed { border-radius: 12px; }
+
+@container (max-width: 660px) {
+  .card-note .callout[data-callout="columns"] > .callout-content { grid-template-columns: 1fr; }
+  .card-note .callout { padding: 13px 15px; }
+  .card-note .callout[data-callout="series"] > .callout-content { grid-template-columns: minmax(0, 1fr); }
+  .card-note .callout[data-callout="series"] > .callout-title { padding-right: 2px; }
+  .card-note .callout[data-callout="series"] > .callout-content > p:nth-of-type(3) { position: static; padding-inline: 2px; }
+}
+@media (max-width: 660px) {
+  .card-note .callout[data-callout="columns"] > .callout-content { grid-template-columns: 1fr; }
+}
+
+/* ═══ 6. Home page container ══════════════════════════════════════════════ */
+.markdown-rendered.vault-home,
+.markdown-source-view.mod-cm6.vault-home {
+  /* Only Home bypasses readable line length, including Minimal's width variables. */
+  --file-line-width: 1180px;
+  --line-width: 1180px;
+  --line-width-wide: 1180px;
+  --max-width: 100%;
+  --content-line-width: 1180px;
+  --content-margin-start: 0px;
+  --file-margins: 24px;
+}
+.markdown-preview-view.vault-home .markdown-preview-sizer,
+.markdown-source-view.mod-cm6.vault-home .cm-sizer,
+.markdown-source-view.mod-cm6.vault-home .cm-content,
+.markdown-source-view.mod-cm6.vault-home .cm-contentContainer {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+}
+.vault-home .inline-title { display: none; }
+.vault-home .callout-content p,
+.vault-home .callout-content li { text-align: left; }
+.vault-home .callout-content p { line-height: 1.9; }
+
+/* ═══ 7. Motion and print ═════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .card-note .callout { transition: none !important; animation: none !important; }
+}
+@media print {
+  .card-note .callout { break-inside: avoid; box-shadow: none; }
+  .card-note .callout[data-callout="series"] { display: none; }
+}
+
+/* Transparent line-art diagrams (e.g. Wikimedia SVGs) stay legible on dark backgrounds. */
+.theme-dark .card-note img[src*="upload.wikimedia.org"] { background: #fff; border-radius: 6px; padding: 8px; }
+
+/* Table captions sit above the table (academic convention); figure captions sit below the figure. */
+.markdown-rendered .table-caption,
+.markdown-preview-view .table-caption {
+  margin: 1.6rem 0 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.88em;
+  line-height: 1.6;
+  text-align: center;
+}
+.markdown-rendered.card-note .table-caption + .table-wrapper,
+.markdown-rendered.card-note .table-caption + table { margin-top: 0; }
+
+/* Figure captions rendered inside the editor also stay left-aligned. */
+.markdown-source-view.mod-cm6 .figure-caption { text-align: start; }
+
+/* ═══ 8. Extra callout kinds (proposition, explain, example, figure) ═══════════ */
+.card-note .callout[data-callout="proposition"] { --callout-color: 84, 96, 186; --callout-icon: lucide-scroll-text; }
+.theme-dark .card-note .callout[data-callout="proposition"] { --callout-color: 160, 170, 240; }
+.card-note .callout[data-callout="explain"] { --callout-color: var(--rn-slate); --callout-icon: lucide-info; }
+.card-note .callout[data-callout="example"] { --callout-color: var(--rn-rose); --callout-icon: lucide-wrench; }
+.card-note .callout[data-callout="figure"] { --callout-color: var(--rn-slate); --callout-icon: lucide-image; }
+
+/* Proposition sits with the tier-1 results. */
+.card-note .callout[data-callout="proposition"] {
+  padding: 16px 20px;
+  border-inline-start-width: 4px;
+  background: rgba(var(--callout-color), 0.075);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 8px 24px -12px rgba(var(--callout-color), 0.35);
+}
+.card-note .callout[data-callout="proposition"] > .callout-title { font-weight: 700; font-size: 1.02em; }
+
+/* Figure callout: image on a white plate, number as a small label, caption below. */
+.card-note .callout[data-callout="figure"] {
+  margin: 1.8rem 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+/* Paper-style caption under the image: "Fig. 1  Caption text." on one line (wraps with a hanging indent). */
+.card-note .callout[data-callout="figure"] > .callout-title {
+  order: 2;
+  display: block;
+  margin: 0.2rem 0 0;
+  padding: 0 0.4rem;
+  font-size: 0.88em;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 0;
+  color: var(--text-muted);
+  text-align: left;
+  text-wrap: pretty;
+}
+.card-note .callout[data-callout="figure"] > .callout-title,
+.card-note .callout[data-callout="figure"] > .callout-title * { text-align: left !important; text-justify: auto !important; }
+.card-note .callout[data-callout="figure"] > .callout-title .callout-title-inner { display: inline; font-weight: inherit; color: inherit; }
+.card-note .callout[data-callout="figure"] > .callout-title strong {
+  margin-right: 0.6em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: rgb(var(--rn-accent));
+}
+.card-note .callout[data-callout="figure"] > .callout-title .callout-icon,
+.card-note .callout[data-callout="figure"] > .callout-title .callout-fold { display: none; }
+.card-note .callout[data-callout="figure"] { display: flex; flex-direction: column; }
+.card-note .callout[data-callout="figure"] > .callout-content { order: 1; display: contents; }
+.card-note .callout[data-callout="figure"] .image-embed,
+.card-note .callout[data-callout="figure"] img {
+  order: 1;
+  background: #fff;
+  border-radius: 10px;
+}
+.card-note .callout[data-callout="figure"] .image-embed {
+  padding: 10px;
+  border: 1px solid var(--background-modifier-border);
+}
+.card-note .callout[data-callout="figure"] .callout-content > p {
+  order: 3;
+  margin: 0.25rem 0 0;
+  padding-left: 0.8rem;
+  border-left: 2px solid rgba(var(--rn-accent), 0.45);
+  color: var(--text-muted);
+  font-size: 0.88em;
+  line-height: 1.6;
+}
+.card-note .callout[data-callout="figure"] .callout-content > p:has(> .internal-embed),
+.card-note .callout[data-callout="figure"] .callout-content > p:has(> .image-embed) {
+  order: 1; border: 0; padding: 0; margin: 0 0 0.4rem;
+}
+
+/* Term and literature notes */
+.term-note .callout[data-callout="definition"] > .callout-title { font-size: 1.1em; }
+.lit-note .callout[data-callout="reading"] .callout-content p { line-height: 1.9; }
+.lit-note .pdf-embed, .lit-note .internal-embed[src$=".pdf"] { border-radius: 10px; overflow: hidden; }
+
+/* Chapter maps: summaries muted after the link. */
+.chapter-map .markdown-rendered li, .markdown-rendered.chapter-map li { line-height: 1.75; }
+.markdown-rendered.chapter-map li { color: var(--text-muted); }
+.markdown-rendered.chapter-map li a.internal-link { font-weight: 600; margin-right: 0.3em; }

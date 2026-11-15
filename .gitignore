@@ -1,0 +1,24 @@
+# Obsidian per-user state
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/workspaces.json
+.obsidian/cache
+.trash/
+
+# Plugin settings and personal data (e.g. kb-open-home reading positions).
+# Dataview's data.json is kept: it enables DataviewJS, which the home dashboard needs.
+.obsidian/plugins/*/data.json
+!.obsidian/plugins/dataview/data.json
+
+# Python
+__pycache__/
+*.pyc
+
+# Figure drafts and audit output
+90 System/figure-scripts/_out/
+Assets/_selftest/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,27 @@
+{
+  "collapse-filter": true,
+  "search": "-path:\"90 System\" -path:Templates -path:docs -file:Home -file:README -file:CLAUDE",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": true,
+  "colorGroups": [
+    { "query": "path:\"20 Articles\"", "color": { "a": 1, "rgb": 3826856 } },
+    { "query": "path:\"30 Terms\"", "color": { "a": 1, "rgb": 2062957 } },
+    { "query": "path:\"40 Literature\"", "color": { "a": 1, "rgb": 10512924 } },
+    { "query": "path:\"10 Series\"", "color": { "a": 1, "rgb": 8018598 } }
+  ],
+  "collapse-display": true,
+  "showArrow": false,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": true,
+  "centerStrength": 0.52,
+  "repelStrength": 10,
+  "linkStrength": 1,
+  "linkDistance": 250,
+  "scale": 1.4,
+  "close": true
+}
