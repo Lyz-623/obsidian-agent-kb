@@ -53,6 +53,8 @@
 .kb-home.kb-home.kb-home button.kb-btn:hover { border-color: rgba(var(--kb-accent), .55); background: rgba(var(--kb-accent), .06); }
 .kb-home.kb-home.kb-home button.kb-btn.is-primary { background: rgb(var(--kb-tone)); border-color: rgb(var(--kb-tone)); color: #fff; }
 .kb-home.kb-home.kb-home button.kb-btn.is-primary:hover { filter: brightness(1.08); }
+/* dark theme: the tone is a light blue, so white text is low-contrast; use near-black text */
+.theme-dark .kb-home.kb-home.kb-home button.kb-btn.is-primary { color: #0e1726; }
 .kb-home.kb-home.kb-home button.kb-btn.is-quiet { border-color: transparent; background: transparent; color: var(--kb-muted); }
 .kb-home.kb-home.kb-home button.kb-btn.is-quiet:hover { color: var(--kb-ink); background: var(--kb-soft); }
 
