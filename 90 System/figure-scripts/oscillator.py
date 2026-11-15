@@ -2,10 +2,11 @@
 
     python "90 System/figure-scripts/oscillator.py"
 
-writes three PNGs to Assets/oscillator/:
+writes four PNGs to Assets/oscillator/:
 - damping-regimes.png   free motion in the three damping regimes + energy decay (article 1, Fig. 1)
 - resonance.png         steady-state amplitude and phase vs drive frequency (article 2, Fig. 1)
 - transient.png         start-up from rest: transient + steady state (article 2, Fig. 2)
+- impulse-response.png  impulse response + response to force pulses of three widths (article 3, Fig. 1)
 
 Model (time in units of 1/omega0, so omega0 = 1):
     x'' + 2 gamma x' + omega0^2 x = (F0/m) cos(omega t),   Q = omega0 / (2 gamma).
@@ -126,7 +127,54 @@ def fig_transient():
     figstyle.save(fig, "oscillator", "transient")
 
 
+def impulse(t, g):
+    """Impulse response G(t) = e^{-g t} sin(wd t) / wd for t >= 0, zero before (omega0 = 1)."""
+    wd = np.sqrt(W0**2 - g**2)
+    tp = np.clip(t, 0, None)
+    return np.where(t >= 0, np.exp(-g * tp) * np.sin(wd * tp) / wd, 0.0)
+
+
+def fig_impulse():
+    fig, (a, b) = figstyle.figure(1, 2, height_mm=58)
+    q = 5.0
+    g = W0 / (2 * q)
+    wd = np.sqrt(W0**2 - g**2)
+    t = np.linspace(-0.5 * T0, 6 * T0, 3000)
+    a.plot(t / T0, impulse(t, g) * W0, color=P["blue"], label=rf"$G\,\omega_0$, $Q={q:g}$")
+    tp = t[t >= 0]
+    env = np.exp(-g * tp) * W0 / wd
+    a.plot(tp / T0, env, color=P["blue"], lw=0.8, ls=":", label=r"$\pm\mathrm{e}^{-\gamma t}\,\omega_0/\omega_d$")
+    a.plot(tp / T0, -env, color=P["blue"], lw=0.8, ls=":")
+    a.axhline(0, color="0.6", lw=0.5)
+    a.set_xlim(-0.5, 6)
+    a.set_ylim(-1.15, 1.6)
+    a.set_xlabel(r"time $t/T_0$")
+    a.set_ylabel(r"impulse response $G\,\omega_0$")
+    a.legend(loc="upper right")
+    figstyle.panel_label(a, "(a)")
+
+    # Gaussian force pulses of equal impulse p (= 1), centred at tc, rms width s T0; x = (1/m) G * F (m = 1).
+    dt = T0 / 400
+    t = np.arange(0, 8 * T0, dt)
+    tc = 2 * T0
+    kern = impulse(t, g)
+    for s, col in [(0.02, P["blue"]), (0.2, P["orange"]), (0.5, P["teal"])]:
+        sig = s * T0
+        f = np.exp(-0.5 * ((t - tc) / sig) ** 2) / (np.sqrt(2 * np.pi) * sig)
+        x = np.convolve(f, kern)[: len(t)] * dt
+        b.plot(t / T0, x * W0, color=col, label=rf"$\sigma={s:g}\,T_0$")
+    b.axhline(0, color="0.6", lw=0.5)
+    b.set_xlim(0, 8)
+    b.set_ylim(-1.15, 1.6)
+    b.set_xlabel(r"time $t/T_0$")
+    b.set_ylabel(r"displacement $x\,m\omega_0/p$")
+    b.legend(loc="upper right")
+    figstyle.panel_label(b, "(b)")
+    figstyle.save(fig, "oscillator", "impulse-response")
+
+
 if __name__ == "__main__":
     fig_damping()
     fig_resonance()
     fig_transient()
+    fig_impulse()

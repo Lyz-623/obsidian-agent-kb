@@ -1,0 +1,69 @@
+<!doctype html>
+<!-- Preview of one note outside Obsidian: note.html?n=<vault path>[&theme=dark][&at=<block id or heading>].
+     The note text comes from data.js (python build_data.py) and is rendered by render.js
+     (markdown-it + KaTeX + Obsidian callouts, wiki links, embeds), styled by the vault's own
+     .obsidian/snippets/kb-article.css on top of an approximation of Obsidian's default theme. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Note (preview)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="obsidian-base.css">
+<link rel="stylesheet" href="../../.obsidian/snippets/kb-article.css">
+<link rel="stylesheet" href="../../.obsidian/snippets/kb-home.css">
+</head>
+<body class="theme-light show-inline-title">
+<div class="markdown-preview-view markdown-rendered" id="view">
+  <div class="markdown-preview-sizer" id="sizer"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="data.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  window.KB_THEME = params.get('theme') === 'dark' ? 'dark' : 'light';
+  document.body.className = 'theme-' + window.KB_THEME + ' show-inline-title';
+  const D = window.KB_DATA;
+  window.KB_CURRENT = params.get('n') || D.config.home || 'Home.md';
+</script>
+<script src="render.js"></script>
+<script>
+  (function () {
+    const path = window.KB_CURRENT;
+    const view = document.getElementById('view');
+    const sizer = document.getElementById('sizer');
+    const raw = D.notes[path];
+    if (raw == null) { sizer.textContent = 'Note not in data.js: ' + path; return; }
+    const page = KBR.pageByPath[path] || {};
+    const css = [].concat(page.cssclasses || []);
+    view.classList.add(...css);
+    document.title = path.split('/').pop().replace(/\.md$/, '') + ' (preview)';
+    const body = raw.replace(/^---\n[\s\S]*?\n---\n?/, '');
+    sizer.innerHTML = '<div class="inline-title">' + path.split('/').pop().replace(/\.md$/, '') + '</div>' +
+      KBR.renderMarkdown(body, { path, dataviewjs: () => '<p><em>(dataviewjs: open home.html)</em></p>' });
+    KBR.decorate(sizer);
+    // Optional scroll target: &at=<block id> (the element just before the id line) or a heading text.
+    const at = params.get('at');
+    if (at) {
+      let el = document.getElementById(at);
+      if (!el) {
+        const m = body.split('\n');
+        const i = m.findIndex(l => l.trim() === '^' + at);
+        // find the n-th callout / heading rendered before that id
+        if (i >= 0) {
+          const before = m.slice(0, i).join('\n');
+          const n = (before.match(/^> \[!/gm) || []).length;
+          el = sizer.querySelectorAll(':scope > .callout')[n - 1] || null;
+        }
+      }
+      // Shift the view instead of window.scrollTo: headless --screenshot always captures from the top.
+      if (el) {
+        const y = el.getBoundingClientRect().top + window.scrollY - 24;
+        view.style.transform = 'translateY(' + (-y) + 'px)';
+      }
+    }
+  })();
+</script>
+</body>
+</html>

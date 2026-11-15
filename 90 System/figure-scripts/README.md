@@ -25,4 +25,4 @@ Embed a figure in a note with a figure callout:
 
 ## Script → PNG (`Assets/…`)
 
-- `oscillator.py` → oscillator/damping-regimes.png, oscillator/resonance.png, oscillator/transient.png
+- `oscillator.py` → oscillator/damping-regimes.png, oscillator/resonance.png, oscillator/transient.png, oscillator/impulse-response.png

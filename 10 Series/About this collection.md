@@ -8,9 +8,9 @@ These notes are a small, complete example of an explainer knowledge base: one qu
 
 ### Entry points
 
-The entry point is [[Home]]. The core of the collection is 2 articles in 1 series, listed in reading order. Each series answers one question, and its series map explains how the articles answer it together:
+The entry point is [[Home]]. The core of the collection is 3 articles in 1 series, listed in reading order. Each series answers one question, and its series map explains how the articles answer it together:
 
-- [[1 Damped and driven oscillations|"Damped and driven oscillations"]]: how a damped oscillator moves on its own and how it answers a periodic force.
+- [[1 Damped and driven oscillations|"Damped and driven oscillations"]]: how a damped oscillator moves on its own, how it answers a periodic force, and how one impulse response predicts its motion under any force.
 
 ### Terms and sources
 

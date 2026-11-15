@@ -1,0 +1,34 @@
+<!doctype html>
+<!-- Preview of the home dashboard outside Obsidian: the vault's real 90 System/home/view.js (unmodified)
+     and its real CSS snippets, running on a Dataview/Obsidian stand-in (dv-shim.js) and an approximation
+     of Obsidian's default theme (obsidian-base.css). Data comes from data.js (python build_data.py).
+     Open as file:///…/docs/preview/home.html, add ?theme=dark for dark mode. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home (preview)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="obsidian-base.css">
+<link rel="stylesheet" href="../../.obsidian/snippets/kb-article.css">
+<link rel="stylesheet" href="../../.obsidian/snippets/kb-home.css">
+</head>
+<body class="theme-light show-inline-title">
+<script>
+  window.KB_THEME = new URLSearchParams(location.search).get('theme') === 'dark' ? 'dark' : 'light';
+  document.body.className = 'theme-' + window.KB_THEME + ' show-inline-title';
+</script>
+<div class="markdown-preview-view markdown-rendered card-note vault-home">
+  <div class="markdown-preview-sizer">
+    <div class="block-language-dataviewjs" id="dv-container"></div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="data.js"></script>
+<script>window.KB_CURRENT = window.KB_DATA.config.home || 'Home.md';</script>
+<script src="render.js"></script>
+<script src="dv-shim.js"></script>
+<script src="../../90%20System/home/view.js"></script>
+</body>
+</html>

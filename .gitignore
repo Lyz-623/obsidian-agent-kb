@@ -22,3 +22,6 @@ Assets/_selftest/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Preview harness: generated note index (python docs/preview/build_data.py)
+docs/preview/data.js

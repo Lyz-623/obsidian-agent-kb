@@ -4,17 +4,71 @@ A template for an **explainer-article knowledge base** in Obsidian that is writt
 
 Instead of loose notes, the vault holds long-form articles that each answer one question at textbook depth: H2 sections split into H3 subsections, callout cards for definitions, results and derivations, numbered key equations, figures computed from Python scripts, citations to literature notes and links to atomic term cards. Series maps are generated from the articles, and a dashboard on the home note shows the learning path, your reading progress and a searchable library. A Claude Code skill, `kb-notes`, packages the workflows that keep all of this consistent: optimising notes, writing new articles, coordinating parallel agents and checking cross-references.
 
-The repository ships a small but complete sample series, *Damped and driven oscillations* (2 articles, 3 figures, 6 term cards, 2 literature notes), so the dashboard works the moment you open the vault.
+The repository ships a small but complete sample series, *Damped and driven oscillations* (3 articles, 4 figures, 8 term cards, 2 literature notes), so the dashboard works the moment you open the vault.
 
-## Screenshots
+![The home dashboard of the sample vault in Obsidian, default dark theme](docs/images/obsidian-home-dark.png)
 
-Placeholders; add images to `docs/screenshots/` and link them here.
+*The home dashboard of the sample vault, screenshot taken in Obsidian (default dark theme): hero with statistics, start/continue-reading card, learning path with read status, and the searchable library (here on the Terms tab).*
 
-- `docs/screenshots/home.png` — home dashboard: hero with statistics, continue-reading card, learning path with read status, library
-- `docs/screenshots/article.png` — an article: callout cards, numbered equation, figure with caption
-- `docs/screenshots/series-map.png` — a generated series map with previous / next navigation
-- `docs/screenshots/term-card.png` — a term card with its "Appears in" list
-- `docs/screenshots/graph.png` — the graph view coloured by note type
+## What it looks like
+
+**An article in Obsidian.** Callout cards for definitions, propositions and derivations, numbered key equations, and a figure card whose PNG is computed by a script in `90 System/figure-scripts/`, with a one-line paper-style caption.
+
+![A derivation card and a figure card with caption in an article, in Obsidian](docs/images/obsidian-article-dark.png)
+
+*Screenshot taken in Obsidian (default dark theme), article "Free damped oscillations".*
+
+<table>
+<tr>
+<td width="50%"><img src="docs/images/home-light.png" alt="Home dashboard, light theme, preview-harness render"></td>
+<td width="50%"><img src="docs/images/term.png" alt="Term card 'Quality factor', preview-harness render"></td>
+</tr>
+<tr>
+<td><em>Home dashboard in light mode with a simulated reading history (continue-reading card, recently read row, read-status dots). Preview-harness render.</em></td>
+<td><em>A term card: one-sentence definition, the article that explains it, and the Dataview "Appears in" list. Preview-harness render.</em></td>
+</tr>
+</table>
+
+**Link graph.** Articles link to the term cards they use and to the literature they cite; series maps and front notes tie the articles together.
+
+![Link graph of the sample vault, coloured by note type](docs/images/graph.png)
+
+**Computed figures.** Every figure in the sample series comes from `90 System/figure-scripts/oscillator.py` with the shared house style of `figstyle.py`:
+
+| Free motion and energy decay | Resonance curves | Start-up transient | Impulse response |
+|---|---|---|---|
+| ![Damping regimes](Assets/oscillator/damping-regimes.png) | ![Resonance](Assets/oscillator/resonance.png) | ![Transient](Assets/oscillator/transient.png) | ![Impulse response](Assets/oscillator/impulse-response.png) |
+
+<sub>How these images were made: the two `obsidian-*.png` images are screenshots taken in Obsidian. The light-mode home and the term card are not Obsidian screenshots: they are rendered from the vault's own `view.js` and CSS by [`docs/preview/shoot.ps1`](docs/preview/shoot.ps1) in headless Microsoft Edge, on a small Dataview stand-in with an invented reading history, approximating Obsidian's default theme (KaTeX instead of MathJax, approximate fonts and spacing). The link graph is drawn with matplotlib from the notes' wiki links by `docs/preview/graph.py`; it is not Obsidian's graph view.</sub>
+
+## How it is organised
+
+A **series map** poses one question and lists its articles in reading order. Each **article** answers one sub-question and links to the **term cards** it defines or uses, the **literature notes** it cites and the **figures** its script computes. The dashboard and the series maps are generated from frontmatter, so adding an article updates both.
+
+```mermaid
+flowchart LR
+  home["Home dashboard<br/>(view.js + Dataview)"] --> sm["Series map<br/>question + generated entries"]
+  sm --> a1["Article 1"] --> a2["Article 2"] --> a3["Article 3"]
+  a1 & a2 & a3 --> tc["Term cards<br/>one concept each"]
+  a1 & a2 & a3 --> lit["Literature notes<br/>citekey = note name"]
+  a1 & a2 & a3 --> fig["Figures<br/>Assets/*.png"]
+  script["figure-scripts/*.py<br/>+ figstyle.py"] --> fig
+  front["Front notes<br/>About · Notation"] -.-> sm
+```
+
+Agents work in the loop below (see [docs/agent-workflow.md](docs/agent-workflow.md)). One coordinating Claude Code session plans and writes briefs; execution agents each own exactly one note; the coordinator integrates their reports and runs the checks before the series maps are regenerated.
+
+```mermaid
+flowchart TD
+  plan["Plan<br/>series, questions, concept owners"] --> brief["Brief per note<br/>(skill reference templates)"]
+  brief --> w1["Writer / optimiser<br/>note A"]
+  brief --> w2["Writer / optimiser<br/>note B"]
+  brief --> w3["Writer / optimiser<br/>note C"]
+  w1 & w2 & w3 --> coord["Coordinator integrates<br/>seq, navigation, number mappings, cross-links"]
+  coord --> checks["Checks<br/>note_stats · xref · linkcheck"]
+  checks -- problems --> coord
+  checks -- clean --> sync["outline-sync.py<br/>regenerates series maps"]
+```
 
 ## Quick start
 
@@ -86,7 +140,8 @@ obsidian-agent-kb/
 │   ├── snippets/                    kb-article.css, kb-home.css
 │   └── plugins/                     dataview (MIT, bundled), kb-open-home (local)
 ├── .claude/skills/kb-notes/         the Claude Code skill
-├── docs/                            agent-workflow.md, conventions.md, examples/
+├── docs/                            agent-workflow.md, conventions.md, examples/,
+│                                    images/ (README images), preview/ (render harness)
 ├── CLAUDE.md                        instructions for agents working in this vault
 └── LICENSE                          MIT
 ```

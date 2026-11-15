@@ -154,7 +154,7 @@ The early beating of the blue curve is the transient at $\omega_d$ interfering w
 
 ^warn-drv-sweep
 
-> [!conclusion] Conclusion — What the series established
+> [!conclusion] Conclusion — What the driven oscillator does
 > A linear oscillator driven at $\omega$ settles, after a transient lasting a few $1/\gamma$, into motion at $\omega$ with the amplitude and lag of Eq. (3). Its absorbed power peaks at $\omega_0$ with width $2\gamma$, so ==the quality factor measured from free decay predicts the sharpness and the height of the resonance==.
 
 ^con-drv-summary
@@ -162,6 +162,6 @@ The early beating of the blue curve is the transient at $\omega_d$ interfering w
 > [!series] Damped and driven oscillations
 > [[Free damped oscillations]]
 >
-> [[Home]]
+> [[Impulse response and arbitrary forces]]
 >
 > [[1 Damped and driven oscillations|Series map]]
