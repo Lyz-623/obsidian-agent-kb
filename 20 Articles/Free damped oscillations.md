@@ -10,7 +10,7 @@ terms: ["[[Natural frequency]]", "[[Damping rate]]", "[[Critical damping]]", "[[
 sources: ["[[French1971]]", "[[Landau1976]]"]
 figures: 1
 equations: 4
-words: 1389
+words: 1476
 cssclasses: [card-note, article-note]
 ---
 A pendulum, a tuning fork, an LC circuit and a molecule's bond all share one behaviour: pushed away from equilibrium, they swing back, overshoot and slowly settle. Almost all of it is captured by a single linear equation with two parameters, a restoring rate and a damping rate. This article asks how the motion follows from those two numbers, when the oscillation disappears altogether, and how to measure "how good" an oscillator is ([[French1971|French 1971]]; [[Landau1976|Landau and Lifshitz 1976]]).
@@ -98,7 +98,7 @@ When the drag is weak, $\gamma<\omega_0$, the square root in Eq. (2) is imaginar
 
 ^fig-free-regimes
 
-In (a) the underdamped curve stays inside its dotted envelope and crosses zero once every half period; the other two never oscillate, and the orange curve settles first.
+Fig. 1(a) compares the three regimes of Eq. (2): the underdamped mass oscillates at $\omega_d$ and crosses zero once every half period, while its peaks follow the envelope $\mathrm{e}^{-\gamma t}$ of Eq. (3); the critically and overdamped masses never cross zero, and of these two the critically damped one returns first, because a larger $\gamma$ only slows the creep back. Fig. 1(b) looks at the same decay through energy: on a logarithmic scale the energy falls along a straight line, with a slope proportional to $1/Q$, so the $Q=20$ oscillator keeps its energy four times longer than the $Q=5$ one. Why the slope is $2\gamma$ and not $\gamma$ is derived in the next section.
 
 ### Critical and overdamped motion
 
@@ -115,7 +115,7 @@ What happens when the square root in Eq. (2) becomes real? The two roots are the
 
 ^def-free-critical
 
-This is why door closers, galvanometers and car suspensions are tuned close to critical damping: it gives the quickest return without ringing (orange curve in Fig. 1a).
+This is why door closers, galvanometers and car suspensions are tuned close to critical damping: it gives the quickest return without ringing (orange curve in Fig. 1(a)).
 
 > [!warning] Caution — "No overshoot" depends on the start
 > A critically damped mass released from rest never crosses $x=0$. Given a large enough initial velocity toward equilibrium, $\dot x(0)<-\omega_0x(0)$, it crosses once and then creeps back from the other side. Overdamped motion can likewise cross zero at most once.

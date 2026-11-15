@@ -16,6 +16,7 @@ Skill files (paths relative to this SKILL.md):
 - `scripts/xref.py` — cross-note displayed-number checker / fixer.
 - `scripts/linkcheck.py` — heading / block-id link checker (`--strict`: also missing notes and files).
 - `scripts/note_stats.py` — recompute and write frontmatter counts; per-note sanity checks.
+- `scripts/figure_audit.py` — every figure panel explained individually as `{figure} N(x)`; no bare "(a)" panel refs.
 
 Run every script with `PYTHONIOENCODING=utf-8 python <script> --vault "<VAULT>" …`. They are Python 3 stdlib only and read the vault config.
 
@@ -53,8 +54,9 @@ Run in this order and fix until clean:
 1. `xref.py --vault V` — every `[[Note#^id|… {label} n …]]` shows the target's real number. `--fix` rewrites mismatches when the target has exactly one number; `MISSING id` and `NO-NUMBER` need a manual fix. `--local` also checks in-note `[[#^id|…]]`. `--skip NOTE…` ignores notes other agents are editing.
 2. `linkcheck.py --vault V` — every `[[Note#Heading]]` / `[[Note#^id]]` resolves → `broken 0`. Add `--strict` to catch links to missing notes and missing embedded files.
 3. `note_stats.py --vault V NOTE…` — compares `figures`, `equations`, `words`, `sections`, `kinds` with the body and checks tags 1..N, figure/table numbers 1..N, TABs, in-note links, images. `--write` updates the frontmatter (keeps newline style).
-4. Outline sync: run the vault's own script in the system folder (`outline-sync.py` or `outline_sync.py`) with `--check`; only run it in write mode when the user's task involves editing notes or the user asks. It is vault-specific and not part of this skill.
-5. Report the counts before and after.
+4. `figure_audit.py --vault V [NOTE…]` — every panel named in a caption is discussed individually in the text as `{figure} N(x)`, no bare "(a)" panel refs, every figure mentioned → `problems 0`. Fixing it means writing real per-panel explanations after viewing the PNG, not inserting labels mechanically.
+5. Outline sync: run the vault's own script in the system folder (`outline-sync.py` or `outline_sync.py`) with `--check`; only run it in write mode when the user's task involves editing notes or the user asks. It is vault-specific and not part of this skill.
+6. Report the counts before and after.
 
 ## 5. Workflow D — restructure the knowledge base
 
@@ -74,7 +76,7 @@ Moving, splitting, merging or renaming articles or series:
 - Every agent's final report must include the inbound mapping (old → new numbers, removed/renamed ids and headings) or "none".
 - **Model allocation:** planning, brief writing and independent review on a strong model at high effort; execution agents (writing, rewriting, fixing, figure scripts) at medium effort; purely mechanical work (applying listed fixes, link/stat checks) at low effort. Do not use high effort for execution.
 - Briefs live in the session scratchpad, not in the vault. Give each agent the brief path and its single note.
-- Before reporting done, the coordinator runs: `xref.py` → `problems 0`, `linkcheck.py` → `broken 0`, outline sync `--check` → no differences, `note_stats.py` on each edited note → no DIFF/CHECK.
+- Before reporting done, the coordinator runs: `xref.py` → `problems 0`, `linkcheck.py` → `broken 0`, `figure_audit.py` → `problems 0`, outline sync `--check` → no differences, `note_stats.py` on each edited note → no DIFF/CHECK.
 
 ## 7. Hard rules
 

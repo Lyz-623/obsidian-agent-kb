@@ -24,7 +24,7 @@ Default goals when the request is "optimise / rewrite this note":
 4. **Keep the derivations.** Important formulas keep compact step-by-step derivation cards with displayed equations; explain physical meaning and why each formula exists. Only truly peripheral derivations may be cut. No knowledge jumps.
 5. **Renumber.** Number only key results, `\tag{1}`..`\tag{N}` in order; figures 1..N; tables 1..N. Update every in-note reference.
 6. **Bridges.** Question-driven 1–2 sentence bridges between cards; no stacked boxes.
-7. **Figure paragraphs.** Paper-style one-line captions (title clause + per-panel clauses); after each figure at most 1–2 interpretive sentences.
+7. **Figure paragraphs.** Paper-style one-line captions (title clause + per-panel clauses). After each figure, explain **every panel individually** with its full label (`{figure} N(a)`, `{figure} N(b)`, …): at least one sentence per panel on what it shows physically and why, never a repeat of the caption's axes or parameters. Never a bare "(a)" anywhere in the body. View each PNG before writing about it.
 
 ## Figures
 
@@ -44,6 +44,7 @@ Default goals when the request is "optimise / rewrite this note":
 
 1. `python <SKILL>/scripts/note_stats.py --vault "<VAULT>" --write "<path to article>"` — then re-run without `--write`; it must report no CHECK lines (tags 1..N, figure/table numbers 1..N, no TABs, in-note links resolve, images exist).
 2. Confirm `sections` / `kinds` / counts in the frontmatter are updated (the script does this).
+3. `python <SKILL>/scripts/figure_audit.py --vault "<VAULT>" "<Article>"` must report 0 problems (every panel discussed as `{figure} N(x)`, no bare panel refs, every figure mentioned).
 
 ## Final report (your last message, concise)
 

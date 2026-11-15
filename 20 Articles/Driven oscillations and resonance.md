@@ -10,7 +10,7 @@ terms: ["[[Steady-state response]]", "[[Resonance]]", "[[Quality factor]]", "[[D
 sources: ["[[French1971]]", "[[Landau1976]]"]
 figures: 2
 equations: 4
-words: 1407
+words: 1554
 cssclasses: [card-note, article-note]
 ---
 Left alone, a damped oscillator always comes to rest. Push it periodically and it ends up moving at the frequency of the push, with an amplitude and a lag that depend strongly on how close that frequency is to its own. This article asks what that steady response is, why it peaks near the natural frequency, how sharp the peak is, and how long the oscillator takes to get there ([[French1971|French 1971]]; [[Landau1976|Landau and Lifshitz 1976]]).
@@ -79,7 +79,7 @@ Equation (3) is easiest to read in three frequency ranges, where a different ter
 
 ^fig-drv-resonance
 
-As $Q$ grows the peak in (a) rises in proportion to $Q$ and narrows, and the phase step in (b) sharpens toward a jump from $0$ to $\pi$ at $\omega_0$.
+Fig. 1(a) shows the gain of Eq. (3): far below $\omega_0$ every curve tends to 1, because a slow force simply stretches the spring; near $\omega_0$ the peak height grows in proportion to $Q$ while the peak narrows, and for $Q=0.5$ there is no peak at all, the response only falls with frequency. Fig. 1(b) shows who leads whom: at low frequency the mass follows the force ($\delta\approx0$), far above $\omega_0$ it moves against it ($\delta\to\pi$), and every curve passes through $\delta=\pi/2$ exactly at $\omega_0$, where the force is in phase with the velocity and therefore does the most work. The larger $Q$, the narrower the frequency range over which this phase change happens, the same narrowing that sharpens the peak in Fig. 1(a).
 
 ## Resonance
 
@@ -145,7 +145,7 @@ The steady state is only what remains after the free motion has died out. How lo
 
 ^fig-drv-transient
 
-The early beating of the blue curve is the transient at $\omega_d$ interfering with the drive at $\omega$; it fades over the first few $1/\gamma\approx3T_0$, after which blue and orange coincide.
+In Fig. 2 the full solution starts at zero, so at $t=0$ the transient must exactly cancel the steady-state part; the two then run at different frequencies, $\omega_d$ and $\omega$, and the early beating of the full curve, overshooting the steady amplitude by about 40 %, is their interference. The transient shrinks as $\mathrm{e}^{-\gamma t}$ and is negligible after a few $1/\gamma\approx3T_0$, after which the full and steady-state curves coincide, as the proposition above predicts.
 
 ### Why the transient matters
 

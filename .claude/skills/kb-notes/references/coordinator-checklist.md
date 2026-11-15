@@ -23,5 +23,5 @@ The coordinator is the only agent that edits more than one note. Work through th
 9. [ ] **Figures.** Every embedded image exists (`linkcheck.py --strict`); each new script is in the figure-scripts README; no draft/backup PNGs left in assets.
 10. [ ] **Hygiene.** No TAB characters; no LaTeX mangled into control characters (search edited files for `\x09`, `\x0c`, `\x08`, `\x0b`, `\x0d` not part of CRLF); no inline HTML for emphasis.
 11. [ ] **Review.** For substantive rewrites, run an independent read-only review agent (strong model, high effort) on the changed articles: conventions, correctness of derivations against sources, concept order. Apply its fixes via medium/low-effort agents.
-12. [ ] **Final checks.** `xref.py` → `problems 0`; `linkcheck.py` → `broken 0`; outline-sync check → no differences.
+12. [ ] **Final checks.** `xref.py` → `problems 0`; `linkcheck.py` → `broken 0`; `figure_audit.py` → `problems 0`; outline-sync check → no differences.
 13. [ ] **Report to the user**: what changed per article, new figures/cards, fixes applied, anything unverified. Do not commit or push unless asked.

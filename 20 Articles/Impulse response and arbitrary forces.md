@@ -10,7 +10,7 @@ terms: ["[[Impulse response]]", "[[Response function]]", "[[Steady-state respons
 sources: ["[[French1971]]", "[[Landau1976]]"]
 figures: 1
 equations: 4
-words: 1319
+words: 1411
 cssclasses: [card-note, article-note]
 ---
 Real forces are rarely pure sinusoids: a hammer strikes a bell, a gust hits a bridge, a laser pulse kicks a molecule. Because the oscillator equation is linear, one response is enough to predict all the others, namely the motion after a single, infinitely short kick. This article asks what that response is, how any force is assembled from kicks, and how the result connects to the steady-state amplitude found for a periodic drive ([[French1971|French 1971]]; [[Landau1976|Landau and Lifshitz 1976]]).
@@ -123,7 +123,7 @@ When does a pulse of finite length still act as a kick? Equation (2) answers it:
 
 ^fig-imp-pulses
 
-The shortest pulse in (b) reproduces the impulse response of (a); the ringing after the $0.2\,T_0$ pulse is reduced to $\mathrm{e}^{-\omega_d^2\sigma^2/2}\approx0.46$ of it, as Eq. (4) predicts for a Gaussian, and the slowest pulse only pushes the mass aside and lets it return.
+Fig. 1(a) is the response to an ideal kick: the mass starts moving at once with velocity $p/m$, so $G$ rises from zero with finite slope, then rings at $\omega_d$ inside the dotted envelope, exactly the free motion of Eq. (1). Fig. 1(b) shows what a finite pulse duration changes: the shortest pulse is still effectively a kick and reproduces the curve of Fig. 1(a) delayed to $t=2T_0$; the $0.2\,T_0$ pulse leaves ringing reduced to $\mathrm{e}^{-\omega_d^2\sigma^2/2}\approx0.46$ of it, as Eq. (4) predicts for a Gaussian; the $0.5\,T_0$ pulse is slower than one oscillation, so it only pushes the mass aside and lets it return, with almost no ringing left. A pulse excites the oscillator only if it contains frequency components near $\omega_d$, which is the time-domain face of the resonance curve.
 
 > [!warning] Caution — Linear only
 > Equations (2) to (4) rest on superposition. They fail once the amplitude is large enough for the restoring force or the drag to stop being linear, for example a pendulum swinging through large angles; then the response to two kicks is not the sum of the responses.

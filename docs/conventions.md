@@ -19,7 +19,7 @@ The full rules live in the `kb-notes` skill's conventions template, `.claude/ski
 - Content goes into callout cards whose title starts with a kind word: `> [!definition] Definition — Title`, likewise Proposition, Derivation, Explanation, Caution, Conclusion, Concept (`intuition`). Cards are connected by 1–2 sentence question-driven bridges.
 - A block id `^def-<prefix>-<slug>` follows every card, figure, key equation and table, after one blank line. Keep ids when content survives.
 - Key equations only are numbered, `\tag{1}` … `\tag{N}` in order; referenced as `Eq. (n)`.
-- Figures: `> [!figure] **Fig. n** caption with one clause per panel` + `![[stem.png|720]]`; at most 1–2 interpreting sentences after it. Every figure comes from a script in `90 System/figure-scripts/`.
+- Figures: `> [!figure] **Fig. n** caption with one clause per panel` + `![[stem.png|720]]`; after it, every panel is explained individually as `Fig. n(a)`, `Fig. n(b)`, … (what it shows and why, never a repeat of the caption), and a bare "(a)" never appears in the body (checked by `figure_audit.py`). Every figure comes from a script in `90 System/figure-scripts/`.
 - Citations: `[[CiteKey|Author Year]]`, no locators. Cross-note references: `[[Article#^id|“Article” Eq. (n)]]`. Key terms link their card on first use: `**[[Term]]**`.
 - Emphasis: `**term**`, `==key result==`, `***critical condition***`; no inline HTML, no TABs.
 - The article ends with a `> [!series]` block: previous, next, series map. Frontmatter counts (`figures`, `equations`, `words`, `sections`, `kinds`) are recomputed by `note_stats.py --write`.

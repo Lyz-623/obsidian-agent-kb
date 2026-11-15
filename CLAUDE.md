@@ -27,6 +27,7 @@ python "90 System/outline-sync.py"                                              
 python "90 System/outline-sync.py" --check                                       # must report "No differences."
 python .claude/skills/kb-notes/scripts/xref.py --vault .                         # must report "problems 0"
 python .claude/skills/kb-notes/scripts/linkcheck.py --vault . --strict           # must report "broken 0"
+python .claude/skills/kb-notes/scripts/figure_audit.py --vault .                 # every panel explained as Fig. N(x): "problems 0"
 ```
 
 (If the skill is installed globally instead, use `~/.claude/skills/kb-notes/scripts/…`.)

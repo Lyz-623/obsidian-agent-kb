@@ -1,5 +1,7 @@
 # obsidian-agent-kb
 
+**English** | [简体中文](README.zh-CN.md)
+
 A template for an **explainer-article knowledge base** in Obsidian that is written and maintained by **Claude Code agents**.
 
 Instead of loose notes, the vault holds long-form articles that each answer one question at textbook depth: H2 sections split into H3 subsections, callout cards for definitions, results and derivations, numbered key equations, figures computed from Python scripts, citations to literature notes and links to atomic term cards. Series maps are generated from the articles, and a dashboard on the home note shows the learning path, your reading progress and a searchable library. A Claude Code skill, `kb-notes`, packages the workflows that keep all of this consistent: optimising notes, writing new articles, coordinating parallel agents and checking cross-references.
@@ -65,7 +67,7 @@ flowchart TD
   brief --> w2["Writer / optimiser<br/>note B"]
   brief --> w3["Writer / optimiser<br/>note C"]
   w1 & w2 & w3 --> coord["Coordinator integrates<br/>seq, navigation, number mappings, cross-links"]
-  coord --> checks["Checks<br/>note_stats · xref · linkcheck"]
+  coord --> checks["Checks<br/>note_stats · xref · linkcheck · figure_audit"]
   checks -- problems --> coord
   checks -- clean --> sync["outline-sync.py<br/>regenerates series maps"]
 ```
@@ -90,7 +92,7 @@ The CSS snippets `kb-article` and `kb-home` are enabled in `.obsidian/appearance
 
 ## Install the `kb-notes` skill
 
-The skill lives in `.claude/skills/kb-notes/` (`SKILL.md`, reference briefs and the conventions template, and the checker scripts `xref.py`, `linkcheck.py`, `note_stats.py`).
+The skill lives in `.claude/skills/kb-notes/` (`SKILL.md`, reference briefs and the conventions template, and the checker scripts `xref.py`, `linkcheck.py`, `note_stats.py`, and `figure_audit.py`, which checks that every figure panel is explained individually).
 
 - **Project-local:** nothing to do. Start Claude Code in the vault folder and the skill is available there; `CLAUDE.md` tells the agent to use it.
 - **Global** (use it with any vault built on this template):

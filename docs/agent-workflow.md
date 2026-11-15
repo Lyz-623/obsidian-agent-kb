@@ -79,6 +79,7 @@ All scripts are Python 3 standard library only. Run them from the vault root wit
 | `python .claude/skills/kb-notes/scripts/xref.py --vault .` | cross-note displayed numbers match the target's `\tag{}` or caption (`--fix`, `--local`, `--skip`) | `problems 0` |
 | `python .claude/skills/kb-notes/scripts/linkcheck.py --vault . --strict` | every `[[Note#Heading]]` / `[[Note#^id]]` resolves; with `--strict` also missing notes and embedded files | `broken 0` |
 | `python .claude/skills/kb-notes/scripts/note_stats.py --vault . "<Note>"` | `figures`, `equations`, `words`, `sections`, `kinds` vs body; tags 1..N; TABs; in-note links; images (`--write` updates) | no `DIFF` / `CHECK` |
+| `python .claude/skills/kb-notes/scripts/figure_audit.py --vault .` | every panel named in a caption is explained individually in the text as `Fig. N(x)`; no bare "(a)" panel refs; every figure mentioned | `problems 0` |
 | `python "90 System/outline-sync.py" --check` | series maps match the articles | `No differences.` |
 
 ## 7. Example prompts
@@ -91,7 +92,8 @@ Copy, adapt and paste into Claude Code.
 - **Optimise one note:** "Optimise the article <Title>: it reads like a list of facts. Restructure it around the question in its first paragraph and add a schematic figure for the mechanism."
 - **Optimise a wave:** "Optimise every article of series <n> in one parallel wave with <reference article> as the style reference. Report per article what was merged, cut and added."
 - **Terms:** "Find concepts used in two or more articles that have no term card, and create the cards; each `defined_in` must point to the article that actually explains the concept."
-- **Check and repair:** "Run xref, linkcheck, note_stats on all articles and outline-sync --check. Fix everything that is mechanical; list anything that needs my decision."
+- **Figure explanations:** "Run figure_audit.py. For every figure it flags, view the PNG and explain each panel in its own sentence as Fig. N(a), Fig. N(b): what it shows and why, not the caption's parameters."
+- **Check and repair:** "Run xref, linkcheck, note_stats, figure_audit on all articles and outline-sync --check. Fix everything that is mechanical; list anything that needs my decision."
 - **Restructure:** "Series 2 has grown to 7 articles. Propose a split into two series with new guiding questions and `seq` values. Wait for approval, then move content, keep block ids, fix all inbound links and regenerate the series maps."
 - **Figures:** "Re-run every figure script, look at each PNG, and fix overlapping labels or legends in the scripts."
 - **Literature:** "For each claim in <article> that cites <CiteKey>, check it against the source and tell me which claims you could not verify."
